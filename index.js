@@ -6,7 +6,7 @@
  * param: key (String)
  * return: (String)
  */
-let fixed_keys = (key) => {
+let fixedKeys = (key) => {
     return key.trim().replace(/\s+/g,"_").replace(/-+/g,"_").toLowerCase();
 }
 
@@ -14,40 +14,40 @@ let fixed_keys = (key) => {
  * Fix the invalid json provided by aws logs streaming. into 
  * a proper json object.
  */
-let fix_json_string = (broken_str) => {
-    let fixed_json={}
-    broken_str = broken_str.substr(1, broken_str.length-2);
-    if(broken_str.length <= 0) return fixed_json;
+let fixJsonString = (brokenStr) => {
+    let fixedJson={}
+    brokenStr = brokenStr.substr(1, brokenStr.length-2);
+    if(brokenStr.length <= 0) return fixedJson;
 
-    let broken_el = broken_str.split(",");
+    let brokenEl = brokenStr.split(",");
 
     
-    for(let index in broken_el){
-        let item=broken_el[index];
+    for(let index in brokenEl){
+        let item=brokenEl[index];
 
         if(item.includes("=")) {
             let attr = item.split("=");
-            fixed_json[fixed_keys(attr[0])] = attr.slice(1).join('=');
+            fixedJson[fixedKeys(attr[0])] = attr.slice(1).join('=');
         
         }else {
-            let prev_item = broken_el[index-1];
-            let prev_attr = prev_item.split("=");
+            let prevItem = brokenEl[index-1];
+            let prevAttr = prevItem.split("=");
 
-            fixed_json[fixed_keys(prev_attr[0])] = fixed_json[fixed_keys(prev_attr[0])] + item;
+            fixedJson[fixedKeys(prevAttr[0])] = fixedJson[fixedKeys(prevAttr[0])] + item;
         }
     }
-    return fixed_json;
+    return fixedJson;
 }
 
 /**
  * Check either the given string is in json format.
  */
-let is_json = (str) => {
+let isJson = (str) => {
     return str.startsWith("{") && str.endsWith("}");
 }
 
-module.exports = function(log_stream) {
-    let log=log_stream["logEvents"]
+module.exports = function(logStream) {
+    let log=logStream["logEvents"]
     
     //TODO: add check if log stream is in invalid format then
     //      return from here, as we can not process it.
@@ -62,14 +62,14 @@ module.exports = function(log_stream) {
             continue;
         }
 
-        let key = fixed_keys(message[0]);
+        let key = fixedKeys(message[0]);
         let value = message.slice(1).join(':').trim();
-        if(is_json(value)) {
+        if(isJson(value)) {
             try {
                 model[key] = JSON.parse(value);
             }
             catch(err) {
-                model[key] = fix_json_string(value);
+                model[key] = fixJsonString(value);
             }
             
         } else {

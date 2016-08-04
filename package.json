@@ -1,0 +1,29 @@
+{
+  "name": "cloudwatch-logs-parser",
+  "version": "1.0.0",
+  "description": "This will parse the cloudwatch logs stream into a json model on which you can done manupulatoin easily",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/forkgeeks/cloudwatch-logs-parser.git"
+  },
+  "keywords": [
+    "cloudwatch",
+    "log",
+    "parser",
+    "stream",
+    "parser",
+    "export",
+    "cloudwatch",
+    "logs"
+  ],
+  "author": "Abdullah Bashir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/forkgeeks/cloudwatch-logs-parser/issues"
+  },
+  "homepage": "https://github.com/forkgeeks/cloudwatch-logs-parser#readme"
+}

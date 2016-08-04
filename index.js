@@ -24,7 +24,7 @@ let extract_headers = (param) => {
     for (let prop in param){
         for (let header in REQ_HEAD_API){
             if(param[prop].startsWith(REQ_HEAD_API[header])){
-                let key=REQ_HEAD_API[header].replace("-","_")
+                let key=REQ_HEAD_API[header].replace("/-/g","_")
                 headers[key] = param[prop].replace(REQ_HEAD_API[header]+"=", "").slice(0,-1)
             }
         }

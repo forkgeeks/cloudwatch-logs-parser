@@ -1,79 +1,80 @@
 "use strict";
 
 /**
- * Interested fields to be get extracted from request header string.
+ * Convert spaces and dashes into underscore, trim the string
+ * and lower case all letters.
+ * param: key (String)
+ * return: (String)
  */
-let REQ_HEAD_API=[
-    "X-Forwarded-Proto",
-    "Host",
-    "X-Forwarded-Port",
-    "x-api-key",
-    "X-Amz-Cf-Id",
-    "X-Forwarded-For",
-    "CloudFront-Is-Desktop-Viewer",
-    "CloudFront-Viewer-Country",
-    "CloudFront-Forwarded-Proto",
-    "CloudFront-Is-Tablet-Viewer",
-    "CloudFront-Is-Mobile-Viewer",
-    "User-Agent"
-]
+let fixed_keys = (key) => {
+    return key.trim().replace(/\s+/g,"_").replace(/-+/g,"_").toLowerCase();
+}
 
+/**
+ * Fix the invalid json provided by aws logs streaming. into 
+ * a proper json object.
+ */
+let fix_json_string = (broken_str) => {
+    let fixed_json={}
+    broken_str = broken_str.substr(1, broken_str.length-2);
+    if(broken_str.length <= 0) return fixed_json;
 
-let extract_headers = (param) => {
-    let headers={}
-    for (let prop in param){
-        for (let header in REQ_HEAD_API){
-            if(param[prop].startsWith(REQ_HEAD_API[header])){
-                let key=REQ_HEAD_API[header].replace("/-/g","_")
-                headers[key] = param[prop].replace(REQ_HEAD_API[header]+"=", "").slice(0,-1)
-            }
+    let broken_el = broken_str.split(",");
+
+    
+    for(let index in broken_el){
+        let item=broken_el[index];
+
+        if(item.includes("=")) {
+            let attr = item.split("=");
+            fixed_json[fixed_keys(attr[0])] = attr.slice(1).join('=');
+        
+        }else {
+            let prev_item = broken_el[index-1];
+            let prev_attr = prev_item.split("=");
+
+            fixed_json[fixed_keys(prev_attr[0])] = fixed_json[fixed_keys(prev_attr[0])] + item;
         }
     }
-    return headers
+    return fixed_json;
 }
 
-let convert_datetime = (param) => {
-    //2016-08-02T04:25:19.517Z
-    let date = new Date(param);
-    // Hours part from the timestamp
-    let hours = "0"+date.getHours();
-    // Minutes part from the timestamp
-    let minutes = "0" + date.getMinutes();
-    // Seconds part from the timestamp
-    let seconds = "0" + date.getSeconds();
-    let year = date.getFullYear();
-    let month = "0"+date.getMonth();
-    let day = "0"+date.getDay();
-    // Will display time in 10:30:23 format
-    let formattedTime = year+"-"+month.substr(-2)+"-"+day.substr(-2)+"T"+hours.substr(-2)+':'+minutes.substr(-2)+':'+seconds.substr(-2)+"Z";
-    return formattedTime;
+/**
+ * Check either the given string is in json format.
+ */
+let is_json = (str) => {
+    return str.startsWith("{") && str.endsWith("}");
 }
 
-let create_model = (obj) => {
-    let EXT_KEY="extractedFields"
-    let TIME_KEY="timestamp"
-    let REQ_HEADER="Method request headers: "
-    let BODY_ORIG="Method request body before transformations: "
-    let REQ_URI="Endpoint request URI: "
-    let log=obj["logEvents"]
+module.exports = function(log_stream) {
+    let log=log_stream["logEvents"]
+    
+    //TODO: add check if log stream is in invalid format then
+    //      return from here, as we can not process it.
 
-    let model= { 
-        "logStreamId": obj["logStream"], 
-        "requestId": log[0][EXT_KEY]["5"], 
-        "resourceMethod": log[1][EXT_KEY]["3"], 
-        "resourcePath": log[1][EXT_KEY]["6"], 
-        "apiKey": log[2][EXT_KEY]["3"], 
-        "reqHeaders":  extract_headers(log[5][EXT_KEY]), 
-        "query": JSON.parse(log[6]["message"].replace(BODY_ORIG,"")), 
-        "requestURI": log[7]["message"].replace(REQ_URI, ""), 
-        "owner": obj["owner"], 
-        "logGroup": obj["logGroup"], 
-        "req_recevied_at": convert_datetime(log[0][TIME_KEY]), 
-        "resp_dispatched_at":convert_datetime(log[15][TIME_KEY])
+    let model={}
+    
+    for (let prop in log){
+        let message = log[prop]["message"].split(":");
+        
+        if(message.length == 1) {
+            model["status"] = message[0];
+            continue;
+        }
+
+        let key = fixed_keys(message[0]);
+        let value = message.slice(1).join(':').trim();
+        if(is_json(value)) {
+            try {
+                model[key] = JSON.parse(value);
+            }
+            catch(err) {
+                model[key] = fix_json_string(value);
+            }
+            
+        } else {
+            model[key] = value;
+        }
     }
-    return model
-}
-
-module.exports = function(logStream) {
-    return create_model(logStream);
+    return model;
 }

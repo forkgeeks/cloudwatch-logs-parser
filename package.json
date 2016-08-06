@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/forkgeeks/cloudwatch-logs-parser#readme",
   "dependencies": {
+    "camelcase": "^2.0.1",
     "mocha": "^3.0.1"
   },
   "devDependencies": {

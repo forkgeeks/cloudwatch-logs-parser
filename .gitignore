@@ -1,3 +1,5 @@
+# NPM
+node_modules/
 # vim extra extensions.
 *.un~
 *.swp

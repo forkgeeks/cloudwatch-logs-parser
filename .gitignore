@@ -1,5 +1,9 @@
 # NPM
 node_modules/
+
+# MAC
+.DS_Store
+
 # vim extra extensions.
 *.un~
 *.swp

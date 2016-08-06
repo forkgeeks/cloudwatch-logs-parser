@@ -2,7 +2,7 @@
   "name": "cloudwatch-logs-parser",
   "version": "1.0.0",
   "description": "This will parse the cloudwatch logs stream into a json model on which you can done manupulatoin easily",
-  "main": "./lib/index.js",
+  "main": "./lib/parser.js",
   "scripts": {
     "test": "standard && mocha test"
   },
@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "rewire": "^2.5.2",
     "standard": "^7.1.2"
   }
 }

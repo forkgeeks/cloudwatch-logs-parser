@@ -8,6 +8,7 @@ When we enable cloudwatch api logs streaming into lambda function we will get ou
 
 Original received logs from Cloudwatch looks like this:
 
+
 ```json
 {
   "logStream": "XXXXXXXXXXXXXXXXXXXXXX",

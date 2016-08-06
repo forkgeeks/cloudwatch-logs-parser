@@ -4,7 +4,7 @@
   "description": "This will parse the cloudwatch logs stream into a json model on which you can done manupulatoin easily",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "standard && mocha test"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "mocha": "^3.0.1"
   },
   "devDependencies": {
-    "chai": "^3.5.0"
+    "chai": "^3.5.0",
+    "standard": "^7.1.2"
   }
 }

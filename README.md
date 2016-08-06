@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/forkgeeks/cloudwatch-logs-parser.svg?branch=master)](https://travis-ci.org/forkgeeks/cloudwatch-logs-parser)
+
 # Cloudwatch Stream logs parser
 This will parse the cloudwatch logs stream into a more useful json format.
 

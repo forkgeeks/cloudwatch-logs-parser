@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/forkgeeks/cloudwatch-logs-parser.svg?branch=master)](https://travis-ci.org/forkgeeks/cloudwatch-logs-parser)
+[![Dependencies Status](https://david-dm.org/mabdullah353/cloudwatch-logs-parser.svg)](https://travis-ci.org/forkgeeks/cloudwatch-logs-parser)
+[![Coverage Status](https://coveralls.io/repos/github/forkgeeks/cloudwatch-logs-parser/badge.svg?branch=master)](https://coveralls.io/github/forkgeeks/cloudwatch-logs-parser?branch=master)
+
 # Cloudwatch Stream logs parser
 This will parse the cloudwatch logs stream into a more useful json format.
 

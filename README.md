@@ -97,3 +97,28 @@ let parser = require("cloudwatch-logs-parser");
 
 console.log(parser(You_aws_log_string));
 ```
+
+# Change Log
+All notable changes to this project will be documented in this file.
+This project adheres to [Semantic Versioning](http://semver.org/).
+
+## [Unreleased]
+
+## [1.0.9] - 2016-08-06
+
+### Added
+- Changelog section in README.md
+- Mocha and chai for testing.
+- test cases inside test/ dir.
+- Travis CI integration
+- StandardJs linter
+- camelCase module.
+
+### Changed
+- renamed index.js into parser.js and placed inside lib/ dir.
+
+### Removed
+- function for fixingKey and using camelCase module now.
+
+[Unreleased]: https://github.com/forkgeeks/cloudwatch-logs-parser/compare/v1.0.9...HEAD
+[1.0.9]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.0.0...v1.0.9

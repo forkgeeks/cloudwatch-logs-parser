@@ -2,13 +2,12 @@
 [![Dependencies Status](https://david-dm.org/forkgeeks/cloudwatch-logs-parser.svg)](https://david-dm.org/forkgeeks/cloudwatch-logs-parser)
 [![Coverage Status](https://coveralls.io/repos/github/forkgeeks/cloudwatch-logs-parser/badge.svg?branch=master)](https://coveralls.io/github/forkgeeks/cloudwatch-logs-parser?branch=master)
 
-# Cloudwatch Stream logs parser
-This will parse the cloudwatch logs stream into a more useful json format.
+# Cloudwatch Stream Logs Parser
+This will parse the cloudwatch logs stream into a more useful JSON format.
 
-When we enable cloudwatch api logs streaming into lambda function we will get our logs in string format which are not usefull for analysis, this parser will extract useful attributes into proper json object.
+Enabling cloudwatch api logs streaming into lambda function results in string formatted logs which are not very useful for analysis. Here comes **Cloudwatch Stream Logs Parser** that extracts useful attributes into proper JSON object.
 
-
-Original received logs from Cloudwatch looks like this:
+Original logs received from Cloudwatch look like:
 
 
 ```json
@@ -55,7 +54,7 @@ Original received logs from Cloudwatch looks like this:
     ...
 ```  
 
-After parsing it will become like this.
+And here's the resulted outcome after parsing:
 
 ```json
   {
@@ -87,15 +86,21 @@ After parsing it will become like this.
 
 ## Usage:
 
+Run following command in your project directory for installation:
 ```javascript
 npm install cloudwatch-logs-parser
 ```
 
-in your javascript file
+Require the installed package in your code as below:
+
 ```javascript
+'use strict'
 let parser = require("cloudwatch-logs-parser");
 
-console.log(parser(You_aws_log_string));
+// Replace this with the actual log stream you are receiving from cloud watch. 
+let awsLogStream = {"logEvents": [{"message": "Starting execution for request: XXXXXX-XXX-XXXX6-XXXX-XXXXXXXXX"}]}
+
+console.log(parser(awsLogStream));
 ```
 
 # Change Log

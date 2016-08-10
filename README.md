@@ -91,11 +91,16 @@ Run following command in your project directory for installation:
 npm install cloudwatch-logs-parser
 ```
 
-Require the installed package in your EcmaScript(Javascript) file as below:
+Require the installed package in your code as below:
+
 ```javascript
+'use strict'
 let parser = require("cloudwatch-logs-parser");
 
-console.log(parser(You_aws_log_string));
+// Replace this with the actual log stream you are receiving from cloud watch. 
+let awsLogStream = {"logEvents": [{"message": "Starting execution for request: XXXXXX-XXX-XXXX6-XXXX-XXXXXXXXX"}]}
+
+console.log(parser(awsLogStream));
 ```
 
 # Change Log
